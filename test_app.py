@@ -40,7 +40,7 @@ def test_config_from_env(monkeypatch):
     assert app.config['MYSQL_DB'] == "testdb"
 
 
-def test_init_db(monkeypatch):
+def test_init_db():
     """Test init_db with mocked cursor/connection"""
     mock_cursor = MagicMock()
     mock_connection = MagicMock()
@@ -48,21 +48,21 @@ def test_init_db(monkeypatch):
 
     with patch.object(mysql, 'connection', mock_connection):
 
-    # Create application context
+        # Create application context
         with app.app_context(): 
 
-    # Run init_db (should try to create table)
-        init_db()
+            # Run init_db (should try to create table)
+            init_db()
 
-    # Ensure cursor executed the correct SQL
-        mock_cursor.execute.assert_called_once_with(
-           '''CREATE TABLE IF NOT EXISTS messages (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                message TEXT
-           ); '''
-        )
+            # Ensure cursor executed the correct SQL
+            mock_cursor.execute.assert_called_once_with(
+                '''CREATE TABLE IF NOT EXISTS messages (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    message TEXT
+                ); '''
+            )
 
-      # Ensure commit and close were called
-        mock_connection.commit.assert_called_once()
-        mock_cursor.close.assert_called_once()
+            # Ensure commit and close were called
+            mock_connection.commit.assert_called_once()
+            mock_cursor.close.assert_called_once()
 
