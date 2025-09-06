@@ -1,2 +1,5 @@
-Flask==2.0.1
-mysqlclient==2.0.3
+Flask
+flask-mysqldb
+PyMySQL
+pytest
+

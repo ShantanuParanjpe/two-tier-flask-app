@@ -2,18 +2,27 @@ version: '3'
 services:
   mysql:
     image: 'shantanu1990/mysql:latest'
+    restart: unless-stopped
     environment:
       MYSQL_DATABASE: myDb
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
       MYSQL_ROOT_PASSWORD: admin
+
     ports:
       - '3306:3306'
+
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./message.sql:/docker-entrypoint-initdb.d/message.sql
+
     networks:
       - twotier
+
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
+      start_period: 60s
       retries: 5
 
   flaskapp:
@@ -25,11 +34,18 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
       MYSQL_DB: myDb
+
     depends_on:
       - mysql
+
+    restart: always
+
     networks:
       - twotier
 
 networks:
   twotier:
     driver: bridge
+    
+volumes:
+  mysql-data:

@@ -1,5 +1,0 @@
-Flask
-flask-mysqldb
-PyMySQL
-pytest
-
