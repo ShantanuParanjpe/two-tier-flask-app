@@ -46,23 +46,23 @@ def test_init_db(monkeypatch):
     mock_connection = MagicMock()
     mock_connection.cursor.return_value = mock_cursor
 
-    # Create application context
-    with app.app_context(): 
+    with patch.object(mysql, 'connection', mock_connection):
 
-       monkeypatch.setattr("app.mysql.connection", mock_connection)
+    # Create application context
+        with app.app_context(): 
 
     # Run init_db (should try to create table)
-       init_db()
+        init_db()
 
     # Ensure cursor executed the correct SQL
-       mock_cursor.execute.assert_called_once_with(
+        mock_cursor.execute.assert_called_once_with(
            '''CREATE TABLE IF NOT EXISTS messages (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 message TEXT
            ); '''
-       )
+        )
 
       # Ensure commit and close were called
-       mock_connection.commit.assert_called_once()
-       mock_cursor.close.assert_called_once()
+        mock_connection.commit.assert_called_once()
+        mock_cursor.close.assert_called_once()
 
