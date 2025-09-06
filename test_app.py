@@ -46,11 +46,10 @@ def test_init_db(monkeypatch):
     mock_connection = MagicMock()
     mock_connection.cursor.return_value = mock_cursor
 
+    monkeypatch.setattr("app.mysql.connection", mock_connection)
+    
     # Create application context
     with app.app_context(): 
-
-      # patch mysql.connection with our mock
-      monkeypatch.setattr("app.mysql.connection", mock_connection)
 
     # Run init_db (should try to create table)
       init_db()
