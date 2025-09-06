@@ -61,9 +61,9 @@ def test_init_db(monkeypatch):
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 message TEXT
             ); '''
-    )
+     )
 
       # Ensure commit and close were called
-        mock_connection.commit.assert_called_once()
-        mock_cursor.close.assert_called_once()
+      mock_connection.commit.assert_called_once()
+      mock_cursor.close.assert_called_once()
 
