@@ -47,23 +47,21 @@ def test_init_db():
     mock_connection.cursor.return_value = mock_cursor
 
 
-        # Create application context
-        with app.app_context(): 
+    with app.app_context(): 
  
 
-            with patch.object(mysql, 'connection', mock_connection):
+        with patch.object(mysql, 'connection', mock_connection):
             
-                init_db()
+             init_db()
 
-                # Ensure cursor executed the correct SQL
-                mock_cursor.execute.assert_called_once_with(
-                    '''CREATE TABLE IF NOT EXISTS messages (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
-                        message TEXT
-                    ); '''
-                )
+             # Ensure cursor executed the correct SQL
+             mock_cursor.execute.assert_called_once_with(
+                 '''CREATE TABLE IF NOT EXISTS messages (
+                     id INT AUTO_INCREMENT PRIMARY KEY,
+                     message TEXT
+                 );'''
+             )
 
-                # Ensure commit and close were called
-                mock_connection.commit.assert_called_once()
-                mock_cursor.close.assert_called_once()
+             mock_connection.commit.assert_called_once()
+             mock_cursor.close.assert_called_once()
 
