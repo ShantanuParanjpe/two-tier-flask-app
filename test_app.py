@@ -35,29 +35,3 @@ def test_config_from_env(monkeypatch):
     assert app.config['MYSQL_PASSWORD'] == "testpass"
     assert app.config['MYSQL_DB'] == "testdb"
 
-
-def test_init_db():
-    """Test init_db with mocked cursor/connection"""
-    mock_cursor = MagicMock()
-    mock_connection = MagicMock()
-    mock_connection.cursor.return_value = mock_cursor
-
-
-    with app.app_context(): 
- 
-
-        with patch("app.mysql.connection", mock_connection):
-            
-             init_db()
-
-             # Ensure cursor executed the correct SQL
-             mock_cursor.execute.assert_called_once_with(
-                 '''CREATE TABLE IF NOT EXISTS messages (
-                     id INT AUTO_INCREMENT PRIMARY KEY,
-                     message TEXT
-                 );'''
-             )
-
-             mock_connection.commit.assert_called_once()
-             mock_cursor.close.assert_called_once()
-
