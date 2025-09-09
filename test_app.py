@@ -1,6 +1,7 @@
 import pytest
+import os
 from unittest.mock import patch, MagicMock
-from app import app, mysql, init_db
+from app import app, init_db
 
 @pytest.fixture
 def client():
@@ -45,7 +46,7 @@ def test_init_db():
     with app.app_context(): 
  
 
-        with patch.object(mysql, 'connection', mock_connection):
+        with patch("app.mysql.connection", mock_connection):
             
              init_db()
 
